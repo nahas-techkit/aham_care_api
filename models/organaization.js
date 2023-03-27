@@ -1,0 +1,25 @@
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
+
+const organizationScheama = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      require: [true, "Name is required"],
+    },
+    type: { type: String, enum: ["Oldage Home", "Orphanage"], require: true },
+    address: { type: String , require: true},
+    photo: { type: String },
+    discription: { type: String },
+    galleryPhotos: [],
+    residence: [{ type: ObjectId, ref: "Recidence" }],
+    requirement: { type: ObjectId, ref: "Requirement" },
+    donations: { type: ObjectId, ref: "Donations" },
+    documents: { type: String },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model("Organization", organizationScheama);
