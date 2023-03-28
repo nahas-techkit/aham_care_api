@@ -28,12 +28,37 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 // Multer
 
+
+// Organization Routs
 router.post("/organaization", upload.any(), createOldage);
 router.post("/addImages", upload.any(), addImages);
 router.post("/addRecidence", upload.single("photo"), addRecidence);
 
 router.put("/organaization/:id", updateOrganaization.updateOrganaization);
-router.put("/requirement/:id",upload.single("excel"), updateOrganaization.updateRequirement);
-router.put("/documents/:id",upload.single("pdf"), updateOrganaization.updateDocument);
+router.put(
+  "/requirement/:id",
+  upload.single("excel"),
+  updateOrganaization.updateRequirement
+);
+router.put(
+  "/documents/:id",
+  upload.single("pdf"),
+  updateOrganaization.updateDocument
+);
+router.put(
+  "/updateCoverPicture/:id",
+  upload.single("photo"),
+  updateOrganaization.updateCoverPicture
+);
+
+router.post("/addImages/:id",upload.any(),addImages)
+router.post("/addRecidence/:id",upload.single('photo'),addRecidence)
+
+
+
+
+
+
+
 
 module.exports = router;

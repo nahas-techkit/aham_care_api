@@ -4,8 +4,10 @@ const Recidence = require("../../../models/recidence");
 module.exports = async (req, res) => {
   try {
     const { body } = req;
+    const {id} = req.params
 
     const savedRecidence = await new Recidence({
+      type:body.type,
       name: body.name,
       age: body.age,
       address: body.address,
@@ -13,7 +15,7 @@ module.exports = async (req, res) => {
     }).save();
 
     const addId = await Organaization.findByIdAndUpdate(
-      body.id,
+      id,
       {
         $push: { residence: savedRecidence._id },
       },

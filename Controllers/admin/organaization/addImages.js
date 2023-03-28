@@ -3,7 +3,7 @@ const Organaization = require("../../../models/organaization");
 module.exports = async (req, res) => {
   try {
     const images = req.files;
-    const { id } = req.body;
+    const { id } = req.params;
     const gallery = images.map((item, i) => `/uploads/images/${item.filename}`);
     console.log(gallery);
     await Organaization.findByIdAndUpdate(id, {

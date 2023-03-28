@@ -3,6 +3,11 @@ const { ObjectId } = mongoose.Schema;
 
 const recidenceSchema = mongoose.Schema(
   {
+    type:{
+      type:String,
+      enum:["Oldage Home", "Orphanage"],
+      require: true
+    },
     name: {
       type: String,
       required: true,

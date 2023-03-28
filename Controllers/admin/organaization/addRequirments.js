@@ -10,7 +10,7 @@ addRequirment = async (excel, centerId) => {
 
     const reuirement = await new Requirements({
       organization: centerId,
-      excelPath: `public/uploads/excel/${excel.filename}`,
+      excelPath: `/uploads/excel/${excel.filename}`,
       requirement: jsonData,
     }).save();
 
