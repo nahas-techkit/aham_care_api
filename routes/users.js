@@ -1,11 +1,35 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const oldAgeHomes = require("../Controllers/user/oldageHome")
-const orphanage = require("../Controllers/user/orphanges")
+var multer = require("multer")
+const oldAgeHomes = require("../Controllers/user/oldageHome");
+const orphanage = require("../Controllers/user/orphanges");
+const donation = require("../Controllers/user/donation");
+const post = require("../Controllers/user/social");
 
-/* Oldage Homes */
-router.get("/oldageHome",oldAgeHomes.getAllOldageHome)
-router.get("/orphanage",orphanage.getAllOrphanage)
+// Multer Setup
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads/post");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
+const upload = multer({ storage: storage });
+// Multer Setup
+
+
+/* Get Organaization */
+router.get("/oldageHome", oldAgeHomes.getAllOldageHome);
+router.get("/orphanage", orphanage.getAllOrphanage);
+
+/* Donation */
+router.post("/donation", donation);
+
+// Post
+router.post("/post",upload.single("image"), post.addPost);
+router.post("/reaction", post.reaction);
+router.get("/post", post.getPosts);
 
 module.exports = router;

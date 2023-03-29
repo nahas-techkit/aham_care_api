@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema;
+const { ObjectId } = mongoose.Schema.Types;
 
 const organizationScheama = mongoose.Schema(
   {
@@ -8,7 +8,7 @@ const organizationScheama = mongoose.Schema(
       require: [true, "Name is required"],
     },
     type: { type: String, enum: ["Oldage Home", "Orphanage"], require: true },
-    address: { type: String , require: true},
+    address: { type: String, require: true },
     photo: { type: String },
     discription: { type: String },
     galleryPhotos: [],

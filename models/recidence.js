@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema;
+const { ObjectId } = mongoose.Schema.Types;
 
 const recidenceSchema = mongoose.Schema(
   {
-    type:{
-      type:String,
-      enum:["Oldage Home", "Orphanage"],
-      require: true
+    type: {
+      type: String,
+      enum: ["Oldage Home", "Orphanage"],
+      require: true,
     },
     name: {
       type: String,

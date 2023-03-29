@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema;
+const { ObjectId } = mongoose.Schema.Types;
 
 const requirementScheam = mongoose.Schema(
   {
     organization: { type: ObjectId, ref: "Oldage" },
-    excelPath:String,
+    excelPath: String,
     requirement: [
       {
         item: { type: String, required: true },
         requirement: { type: Number, required: true },
-        requirementUnit: { type: String,required: true },
+        requirementUnit: { type: String, required: true },
         price: { type: Number, required: true },
-        needs: String ,
+        needs: String,
       },
     ],
   },
