@@ -1,0 +1,31 @@
+const Store = require("../../models/store");
+const StoreDonation = require("../../models/storeDonation");
+
+module.exports = async (req, res) => {
+  try {
+    const { body } = req;
+    const { remaining } = await Store.findById(body.storeId);
+
+    if(remaining <= 0 ){
+        return res.status(200).json({message:"This is full filled"})
+    }
+
+    if(remaining < body.donatedAmount){
+        return res.status(400).json({message:`we want only ${remaining} rupees`} )
+    }
+
+
+
+    const savedStoreDonation = await new StoreDonation({
+      userId: body.userId,
+      storeId: body.storeId,
+      paymentId: body.paymentId,
+      donatedAmount: body.donatedAmount,
+    }).save();
+
+    const store = await Store.findByIdAndUpdate(savedStoreDonation.storeId, {
+      $push: { donations: savedStoreDonation._id },
+      $set: {remaining:remaining - savedStoreDonation.donatedAmount},
+    });
+  } catch (error) {}
+};

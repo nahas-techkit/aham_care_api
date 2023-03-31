@@ -5,6 +5,7 @@ const addImages = require("../Controllers/admin/organaization/addImages");
 const addRecidence = require("../Controllers/admin/organaization/addRecience");
 const updateOrganaization = require("../Controllers/admin/organaization/updateOrgnaization");
 const Store = require("../Controllers/admin/store/store")
+const events = require("../Controllers/admin/events/events")
 
 const multer = require("multer");
 
@@ -54,6 +55,20 @@ router.put(
 
 router.post("/addImages/:id",upload.any(),addImages)
 router.post("/addRecidence/:id",upload.single('photo'),addRecidence)
+
+// Store
+router.post("/store", Store.createStore)
+router.put("/editStore/:id",Store.editStore)
+router.put("/deleteStore/:id", Store.deleteStore)
+router.get("/store", Store.getAllStore)
+
+// Events
+router.post("/event", events.createEvent)
+router.put("/editEvent/:id", events.editEvent)
+router.patch("/eventStatus/:id", events.changeStatus)
+router.patch("/deleteEvent/:id",events.deleteEvent)
+router.get("/event", events.getAllEvents)
+
 
 
 

@@ -11,8 +11,8 @@ module.exports = {
         unit: body.unit,
         unitPrice: body.unitPrice,
         totalPrice: body.totalPrice,
-        needs: body.requirement,
-        status: body.status,
+        remaining: body.requirement,
+        
       }).save();
 
       res
@@ -30,7 +30,7 @@ module.exports = {
 
       const editedStore = await Store.findByIdAndUpdate(id, {
         $set: body,
-      });
+      },{new:true});
 
       res
         .status(200)
@@ -55,7 +55,7 @@ module.exports = {
 
   getAllStore: async (req, res) => {
     try {
-      const stores = await Store.find({status:!"deleted"}).sort({ createdAt: -1 });
+      const stores = await Store.find({status:{$ne:"deleted"}}).sort({ createdAt: -1 });
       res.status(200).json(stores);
     } catch (error) {
       res.status(500).json({ message: error.message });

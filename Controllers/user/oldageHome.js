@@ -5,10 +5,12 @@ module.exports = {
     try {
       const oldAgeHomes = await OldageHome.find({ type: "Oldage Home" })
         .populate("residence")
-        .populate("requirement");
-      
+        .populate("requirement").sort({createdAt:-1});
 
-      res.status(200).json({oldAgeHomes})
+        const totalRecidence = oldAgeHomes[0].residence.length
+      
+      
+      res.status(200).json({oldAgeHomes,totalRecidence})
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

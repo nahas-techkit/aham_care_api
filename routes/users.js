@@ -5,6 +5,7 @@ const oldAgeHomes = require("../Controllers/user/oldageHome");
 const orphanage = require("../Controllers/user/orphanges");
 const donation = require("../Controllers/user/donation");
 const post = require("../Controllers/user/social");
+const eventDonation = require("../Controllers/user/eventDonation")
 
 // Multer Setup
 const storage = multer.diskStorage({
@@ -31,5 +32,8 @@ router.post("/donation", donation);
 router.post("/post",upload.single("image"), post.addPost);
 router.post("/reaction", post.reaction);
 router.get("/post", post.getPosts);
+
+// Event Donation
+router.post("/eventDonation",eventDonation)
 
 module.exports = router;
