@@ -1,5 +1,6 @@
 const Donation = require("../../models/donation");
 const Requirement = require("../../models/requirment");
+const User = require("../../models/user")
 const { sendmail } = require("../../lib/regardMail");
 
 module.exports = async (req, res) => {
@@ -13,6 +14,8 @@ module.exports = async (req, res) => {
       totalPrice: body.totalPrice,
       transactionId: body.transactionId,
     }).save();
+
+    const {email} = await User.findById(body.userId)
 
     const { requirement } = await Requirement.findById(
       savedDonation.requirmentId
@@ -36,9 +39,9 @@ module.exports = async (req, res) => {
     );
 
     sendmail({
-      to: "nahasbinasker@gmail.com",
+      to: email,
       from: "rishad@techkit.in",
-      subject: "hello world",
+      subject: "hello this message from ahamcare",
     });
 
     res.send(updatedNeeds);

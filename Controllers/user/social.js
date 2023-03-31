@@ -55,7 +55,7 @@ module.exports = {
 
   getPosts: async (req, res) => {
     try {
-      const perPage = 2;
+      const perPage = 20;
       const page = req.query.page || 1;
 
       const posts = await Post.find()
