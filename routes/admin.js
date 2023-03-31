@@ -4,6 +4,7 @@ const createOldage = require("../Controllers/admin/organaization/createOrganaiza
 const addImages = require("../Controllers/admin/organaization/addImages");
 const addRecidence = require("../Controllers/admin/organaization/addRecience");
 const updateOrganaization = require("../Controllers/admin/organaization/updateOrgnaization");
+const Store = require("../Controllers/admin/store/store")
 
 const multer = require("multer");
 

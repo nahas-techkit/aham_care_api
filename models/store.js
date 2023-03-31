@@ -3,6 +3,7 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const storeSchema = mongoose.Schema({
     item:String,
+    discription:String,
     requirement:Number,
     unit:String,
     unitPrice:String,
@@ -10,6 +11,9 @@ const storeSchema = mongoose.Schema({
     needs:String,
     status:String
 
+},
+{
+    timestamps: true,
 })
 
 module.exports = mongoose.model ("Store", storeSchema)
