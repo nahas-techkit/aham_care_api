@@ -27,5 +27,9 @@ module.exports = async (req, res) => {
       $push: { donations: savedStoreDonation._id },
       $set: {remaining:remaining - savedStoreDonation.donatedAmount},
     });
-  } catch (error) {}
+
+    res.status(200).json({message:"Thankyou"})
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

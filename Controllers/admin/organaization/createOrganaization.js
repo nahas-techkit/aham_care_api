@@ -6,10 +6,11 @@ module.exports = async (req, res) => {
   try {
     const { body } = req;
     const { files } = req;
+    console.log(body.type === "Oldage Home");
     const pdf = files.filter((item, i) => item.fieldname === "pdf");
     const excel = files.filter((item, i) => item.fieldname === "excel");
     const photo = files.filter((item, i) => item.fieldname === "photo");
-    console.log("excel", excel);
+ 
     const savedOrganaization = await new Organaization({
       type: body.type,
       name: body.name,
@@ -17,6 +18,9 @@ module.exports = async (req, res) => {
       discription: body.discription,
       photo: "uploads/images/" + photo[0].filename,
       documents: "uploads/pdf/" + pdf[0].filename,
+      place:body.place,
+      email:body.email,
+      phone:body.phone_no
     }).save();
     const requirement = await addRequirment(excel[0], savedOrganaization._id);
     console.log("requirement=>",requirement);

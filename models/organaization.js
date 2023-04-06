@@ -7,7 +7,7 @@ const organizationScheama = mongoose.Schema(
       type: String,
       require: [true, "Name is required"],
     },
-    type: { type: String, enum: ["Oldage Home", "Orphanage"], require: true },
+    type: { type: String,  require: true },
     address: { type: String, require: true },
     photo: { type: String },
     discription: { type: String },
@@ -16,6 +16,9 @@ const organizationScheama = mongoose.Schema(
     requirement: { type: ObjectId, ref: "Requirement" },
     donations: { type: ObjectId, ref: "Donations" },
     documents: { type: String },
+    email:{type:String, require:true},
+    phone:{type:String, require:true},
+    place:{type:String, require:true},
   },
   {
     timestamps: true,

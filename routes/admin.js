@@ -6,6 +6,7 @@ const addRecidence = require("../Controllers/admin/organaization/addRecience");
 const updateOrganaization = require("../Controllers/admin/organaization/updateOrgnaization");
 const Store = require("../Controllers/admin/store/store")
 const events = require("../Controllers/admin/events/events")
+const oldageHome = require('../Controllers/user/oldageHome')
 
 const multer = require("multer");
 
@@ -55,6 +56,8 @@ router.put(
 
 router.post("/addImages/:id",upload.any(),addImages)
 router.post("/addRecidence/:id",upload.single('photo'),addRecidence)
+router.get("/getOldageHome",oldageHome.getAllOldageHome )
+router.get("/getOldageHomes/:id",oldageHome.getOldageHomeById )
 
 // Store
 router.post("/store", Store.createStore)
