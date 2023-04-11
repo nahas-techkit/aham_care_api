@@ -7,6 +7,7 @@ const updateOrganaization = require("../Controllers/admin/organaization/updateOr
 const Store = require("../Controllers/admin/store/store")
 const events = require("../Controllers/admin/events/events")
 const oldageHome = require('../Controllers/user/oldageHome')
+const orphange = require('../Controllers/user/orphanges')
 
 const multer = require("multer");
 
@@ -57,13 +58,22 @@ router.put(
 router.post("/addImages/:id",upload.any(),addImages)
 router.post("/addRecidence/:id",upload.single('photo'),addRecidence)
 router.get("/getOldageHome",oldageHome.getAllOldageHome )
-router.get("/getOldageHomes/:id",oldageHome.getOldageHomeById )
+router.get("/getOldageHome/:id",oldageHome.getOldageHomeById )
+router.get("/orphange",orphange.getAllOrphanage )
+router.get("/orphange/:id",orphange.getOrphangeById )
 
 // Store
 router.post("/store", Store.createStore)
 router.put("/editStore/:id",Store.editStore)
 router.put("/deleteStore/:id", Store.deleteStore)
 router.get("/store", Store.getAllStore)
+router.get("/store/:id", Store.getStoreById)
+
+// Store Donations
+router.get("/donations/:storeId", Store.getStoreDonations)
+router.patch("/status/:storeId", Store.changeStoreStatus)
+router.delete("/store-donation/:id", Store.deleteStoreDonation)
+
 
 // Events
 router.post("/event", events.createEvent)

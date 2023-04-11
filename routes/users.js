@@ -8,6 +8,8 @@ const post = require("../Controllers/user/social");
 const eventDonation = require("../Controllers/user/eventDonation")
 const Store = require("../Controllers/admin/store/store")
 const events = require("../Controllers/admin/events/events")
+const storeDonation = require ("../Controllers/user/storeDonation")
+const mapLocation = require("../Controllers/map/getNearbyOrganaization")
 
 // Multer Setup
 const storage = multer.diskStorage({
@@ -37,11 +39,15 @@ router.get("/post", post.getPosts);
 
 // Event Donation
 router.post("/eventDonation",eventDonation)
+router.post("/storeDonation",storeDonation)
 
-outer.get("/store", Store.getAllStore)
+router.get("/store", Store.getAllStore)
 
 // Event
 router.get("/event", events.getAllEvents)
+
+// Map Locations
+router.post('/getMapLocaton',mapLocation)
 
 
 

@@ -1,18 +1,20 @@
 const Store = require("../../../models/store");
+const StoreDonations = require("../../../models/storeDonation");
 
 module.exports = {
   createStore: async (req, res) => {
     try {
       const { body } = req;
+
       const savedStore = await new Store({
         item: body.item,
         discription: body.discription,
-        requirement: body.requirement,
+        requirement: body.requiremnt,
         unit: body.unit,
         unitPrice: body.unitPrice,
         totalPrice: body.totalPrice,
-        remaining: body.requirement,
-        
+        remaining: body.requiremnt,
+       
       }).save();
 
       res
@@ -28,9 +30,13 @@ module.exports = {
       const { body } = req;
       const { id } = req.params;
 
-      const editedStore = await Store.findByIdAndUpdate(id, {
-        $set: body,
-      },{new:true});
+      const editedStore = await Store.findByIdAndUpdate(
+        id,
+        {
+          $set: body,
+        },
+        { new: true }
+      );
 
       res
         .status(200)
@@ -44,7 +50,7 @@ module.exports = {
     try {
       const { id } = req.params;
       await Store.findByIdAndUpdate(id, {
-        $set: { status: "deleted" },
+        $set: { status: "Deleted" },
       });
 
       res.status(200).json({ message: "Store deleted successfully" });
@@ -55,8 +61,62 @@ module.exports = {
 
   getAllStore: async (req, res) => {
     try {
-      const stores = await Store.find({status:{$ne:"deleted"}}).sort({ createdAt: -1 });
-      res.status(200).json(stores);
+      const stores = await Store.find({ status: { $ne: "deleted" } }).sort({
+        createdAt: -1,
+      });
+      res.status(200).json({ stores });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getStoreById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      console.log("id", id);
+      const store = await Store.findById(id)
+        .populate("donations")
+        .sort({ createdAt: -1 });
+      console.log(store);
+      res.status(200).json({ store });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getStoreDonations: async (req, res) => {
+    try {
+      const { storeId } = req.params;
+      const donations = await StoreDonations.find({
+        storeId: storeId,
+      }).populate("userId");
+      res.status(200).json({ donations });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  changeStoreStatus: async (req, res) => {
+    try {
+      const { storeId } = req.params;
+      const { status } = req.body;
+      console.log(storeId, status);
+      await StoreDonations.findByIdAndUpdate(storeId, {
+        $set: { status: status },
+      });
+      res.status(200).json({ message: `Status Change to ${status}` });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  deleteStoreDonation: async (req, res) => {
+    try {
+      const { id } = req.params;
+      await StoreDonations.findByIdAndUpdate(id, {
+        $set: { status: "Delete" },
+      });
+      res.status(202).json({ message: `Deleted Successfully` });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
