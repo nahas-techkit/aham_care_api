@@ -2,12 +2,16 @@ const googleMapsClient = require('@google/maps').createClient({
     key: process.env.GOOGLE_MAP_API_KEY
   });
 
+const Organaization = require ('../../models/organaization')
+
 module.exports =  async (req, res) => {
   try {
     const { LocationData } = req.body;
     const organizationNames = ["Missionaries of charity", "His Way Children's Home", "NAMS Snehasadan"]; // replace with the names of the organizations you want to search for
-
+    const organaization = await Organaization.find().select("name type -_id")
     const RADIUS = 5000; // update the radius to 5 km (5000 meters)
+
+    res.send(organaization)
 
     const promises = organizationNames.map((name) => {
       return new Promise((resolve, reject) => {

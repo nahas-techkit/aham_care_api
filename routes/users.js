@@ -10,7 +10,8 @@ const Store = require("../Controllers/admin/store/store")
 const events = require("../Controllers/admin/events/events")
 const storeDonation = require ("../Controllers/user/storeDonation")
 const mapLocation = require("../Controllers/map/getNearbyOrganaization")
-
+const panCard =require ('../Controllers/pancard/pancard')
+const user = require('../Controllers/user/profile')
 // Multer Setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -48,6 +49,12 @@ router.get("/event", events.getAllEvents)
 
 // Map Locations
 router.post('/getMapLocaton',mapLocation)
+
+// PAN Card
+router.get('/pancard', panCard)
+
+// User Deatils
+router.get('/user/:id', user.getProfileById)
 
 
 

@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
       subject: "hello this message from ahamcare",
     });
 
-    res.send(updatedNeeds);
+    res.status(200).json(updatedNeeds);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

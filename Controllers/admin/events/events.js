@@ -5,6 +5,7 @@ module.exports = {
   createEvent: async (req, res) => {
     try {
       const { body } = req;
+      console.log("body=>", body);
       const savedEvent = await new Event({
         event: body.event,
         discription: body.discription,
@@ -19,7 +20,7 @@ module.exports = {
         .status(200)
         .json({ savedEvent, message: "Event created successfully" });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error });
     }
   },
 

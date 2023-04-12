@@ -6,7 +6,8 @@ const eventDonationSchema = mongoose.Schema({
     eventId:{type:ObjectId, ref:"Event"},
     paymentId:{type:String, require:true},
     donatedTickets:{type:Number, require:true},
-    totalAmount:{type:Number, require:true}
+    totalAmount:{type:Number, require:true},
+    status:{type:String, require:true, enum:["Received", "Processing", "Completed"], default:"Active"}
 },
 {
     timestamps: true,
