@@ -81,6 +81,7 @@ router.put("/editEvent/:id", events.editEvent)
 router.patch("/eventStatus/:id", events.changeStatus)
 router.patch("/deleteEvent/:id",events.deleteEvent)
 router.get("/event", events.getAllEvents)
+router.get("/event/:id", events.getEventById)
 
 
 

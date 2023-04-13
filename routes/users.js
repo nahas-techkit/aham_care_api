@@ -1,21 +1,25 @@
 var express = require("express");
 var router = express.Router();
-var multer = require("multer")
+var multer = require("multer");
 const oldAgeHomes = require("../Controllers/user/oldageHome");
 const orphanage = require("../Controllers/user/orphanges");
 const donation = require("../Controllers/user/donation");
 const post = require("../Controllers/user/social");
-const eventDonation = require("../Controllers/user/eventDonation")
-const Store = require("../Controllers/admin/store/store")
-const events = require("../Controllers/admin/events/events")
-const storeDonation = require ("../Controllers/user/storeDonation")
-const mapLocation = require("../Controllers/map/getNearbyOrganaization")
-const panCard =require ('../Controllers/pancard/pancard')
-const user = require('../Controllers/user/profile')
+const eventDonation = require("../Controllers/user/eventDonation");
+const Store = require("../Controllers/admin/store/store");
+const events = require("../Controllers/admin/events/events");
+const storeDonation = require("../Controllers/user/storeDonation");
+const mapLocation = require("../Controllers/map/getNearbyOrganaization");
+const panCard = require("../Controllers/pancard/pancard");
+const user = require("../Controllers/user/profile");
 // Multer Setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads/post");
+    if (file.fieldname === "image") {
+      cb(null, "public/uploads/post");
+    } else {
+      cb(null, "public/uploads/profile");
+    }
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
@@ -23,7 +27,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-// Multer Setup
+
+/* ============================================================== */
 
 
 /* Get Organaization */
@@ -34,27 +39,35 @@ router.get("/orphanage", orphanage.getAllOrphanage);
 router.post("/donation", donation);
 
 // Post
-router.post("/post",upload.single("image"), post.addPost);
+router.post("/post", upload.single("image"), post.addPost);
 router.post("/reaction", post.reaction);
 router.get("/post", post.getPosts);
 
 // Event Donation
-router.post("/eventDonation",eventDonation)
-router.post("/storeDonation",storeDonation)
+router.post("/eventDonation", eventDonation);
+router.post("/storeDonation", storeDonation);
 
-router.get("/store", Store.getAllStore)
+router.get("/store", Store.getAllStore);
 
 // Event
-router.get("/event", events.getAllEvents)
+router.get("/event", events.getAllEvents);
 
 // Map Locations
-router.post('/getMapLocaton',mapLocation)
+router.post("/getMapLocaton", mapLocation);
 
 // PAN Card
-router.get('/pancard', panCard)
+router.get("/pancard", panCard);
 
-// User Deatils
-router.get('/user/:id', user.getProfileById)
+// User Profile
+router.get("/user/:id", user.getProfileById);
+router.put("/user/:id", user.editProfile);
+router.patch(
+  "/userProfile/:id",
+  upload.single("profilePicture"),
+  user.addProfilePicture
+);
+
+router.get('/getDonations', user.getDonations)
 
 
 

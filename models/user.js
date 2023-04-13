@@ -16,6 +16,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Phone Number is Required"],
     },
+
+    panCardNo:String,
+    aadharNo:String,
+    profilePicture:String,
     password: {
       type: String,
       required: [true, "Password is Required"],

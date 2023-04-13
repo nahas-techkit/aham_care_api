@@ -29,9 +29,13 @@ module.exports = {
       const { id } = req.params;
       const { body } = req;
 
-      const editedEvent = await Event.findByIdAndUpdate(id, {
-        $set: body,
-      },{new:true});
+      const editedEvent = await Event.findByIdAndUpdate(
+        id,
+        {
+          $set: body,
+        },
+        { new: true }
+      );
 
       res
         .status(200)
@@ -45,10 +49,9 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      await Event.
-        findByIdAndUpdate(id, {
-          status: "Deleted",
-        });
+      await Event.findByIdAndUpdate(id, {
+        status: "Deleted",
+      });
 
       res.status(200).json({ message: "Event Deleted Sucessfully" });
     } catch (error) {
@@ -77,7 +80,19 @@ module.exports = {
         createdAt: -1,
       });
 
-      res.status(200).json(events)
+      res.status(200).json(events);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getEventById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const event = await Event.findById(id)
+        .populate("donations")
+        .sort({ createdAt: -1 });
+      res.status(200).json(event);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
