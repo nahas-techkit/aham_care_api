@@ -1,9 +1,9 @@
 const User = require("../../models/user");
-const Donations = require("../../models/donation")
-const EventDonation = require("../../models/eventDonation")
-const StoreDonation = require ("../../models/storeDonation")
+const Donations = require("../../models/donation");
+const EventDonation = require("../../models/eventDonation");
+const StoreDonation = require("../../models/storeDonation");
 const deleteFile = require("../../lib/deleteFiles");
-
+const organaization = require("../../models/organaization");
 
 module.exports = {
   getProfileById: async (req, res) => {
@@ -59,12 +59,45 @@ module.exports = {
 
   getDonations: async (req, res) => {
     try {
-        const {id} = req.params
-        const donations = await Donations.find({userId:id})
-        console.log(donations);
-        
-        res.send(donations)
+      console.log("donations");
+      const { id } = req.params;
+      const donations = await Donations.find({ userId: id })
+        .populate({
+          path: "organaizationId",
+          select: "name",
+        })
+        .select("organaizationId  totalPrice createdAt");
+      const storeDonation = await StoreDonation.find({ userId: id })
+        .populate({ path: "storeId", select: "item" })
+        .select("storeId  totalPrice createdAt");
+      const eventDonation = await EventDonation.find({ userId: id })
+        .populate({ path: "eventId", select: "event" })
+        .select("eventId totalAmount createdAt");
 
+      const orgDon = donations.map((item) => ({
+        _id: item?._id,
+        name: item?.organaizationId?.name,
+        totalPrice: item?.totalPrice,
+        createdAt: item?.createdAt,
+        type: "organaization",
+      }));
+      const evnDon = eventDonation.map((item) => ({
+        _id: item?._id,
+        name: item?.eventId.event,
+        totalPrice: item?.totalAmount,
+        createdAt: item?.createdAt,
+        type: "event",
+      }));
+
+      const strDon = storeDonation.map((item) => ({
+        _id: item?._id,
+        name: item?.storeId.event,
+        totalPrice: item?.totalPrice,
+        createdAt: item?.createdAt,
+        type: "store",
+      }));
+      let allDonations = [...orgDon, ...evnDon, ...strDon];
+      res.status(200).json(allDonations);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

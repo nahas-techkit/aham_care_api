@@ -38,7 +38,7 @@ router.get("/orphanage", orphanage.getAllOrphanage);
 /* Donation */
 router.post("/donation", donation);
 
-// Post
+// Social Post
 router.post("/post", upload.single("image"), post.addPost);
 router.post("/reaction", post.reaction);
 router.get("/post", post.getPosts);
@@ -46,7 +46,6 @@ router.get("/post", post.getPosts);
 // Event Donation
 router.post("/eventDonation", eventDonation);
 router.post("/storeDonation", storeDonation);
-
 router.get("/store", Store.getAllStore);
 
 // Event
@@ -55,7 +54,7 @@ router.get("/event", events.getAllEvents);
 // Map Locations
 router.post("/getMapLocaton", mapLocation);
 
-// PAN Card
+// PAN Card Varification
 router.get("/pancard", panCard);
 
 // User Profile
@@ -66,8 +65,8 @@ router.patch(
   upload.single("profilePicture"),
   user.addProfilePicture
 );
+router.get('/getDonations/:id', user.getDonations)
 
-router.get('/getDonations', user.getDonations)
 
 
 
