@@ -4,10 +4,11 @@ const createOldage = require("../Controllers/admin/organaization/createOrganaiza
 const addImages = require("../Controllers/admin/organaization/addImages");
 const addRecidence = require("../Controllers/admin/organaization/addRecience");
 const updateOrganaization = require("../Controllers/admin/organaization/updateOrgnaization");
-const Store = require("../Controllers/admin/store/store")
-const events = require("../Controllers/admin/events/events")
-const oldageHome = require('../Controllers/user/oldageHome')
-const orphange = require('../Controllers/user/orphanges')
+const Store = require("../Controllers/admin/store/store");
+const events = require("../Controllers/admin/events/events");
+const oldageHome = require("../Controllers/user/oldageHome");
+const orphange = require("../Controllers/user/orphanges");
+const OrganizationType = require("../Controllers/admin/organization-type");
 
 const multer = require("multer");
 
@@ -32,7 +33,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 // Multer
 
-
 // Organization Routs
 router.post("/organaization", upload.any(), createOldage);
 router.post("/addImages", upload.any(), addImages);
@@ -55,40 +55,38 @@ router.put(
   updateOrganaization.updateCoverPicture
 );
 
-router.post("/addImages/:id",upload.any(),addImages)
-router.post("/addRecidence/:id",upload.single('photo'),addRecidence)
-router.get("/getOldageHome",oldageHome.getAllOldageHome )
-router.get("/getOldageHome/:id",oldageHome.getOldageHomeById )
-router.get("/orphange",orphange.getAllOrphanage )
-router.get("/orphange/:id",orphange.getOrphangeById )
+router.post("/addImages/:id", upload.any(), addImages);
+router.post("/addRecidence/:id", upload.single("photo"), addRecidence);
+router.get("/getOldageHome", oldageHome.getAllOldageHome);
+router.get("/getOldageHome/:id", oldageHome.getOldageHomeById);
+router.get("/orphange", orphange.getAllOrphanage);
+router.get("/orphange/:id", orphange.getOrphangeById);
 
 // Store
-router.post("/store", Store.createStore)
-router.put("/editStore/:id",Store.editStore)
-router.put("/deleteStore/:id", Store.deleteStore)
-router.get("/store", Store.getAllStore)
-router.get("/store/:id", Store.getStoreById)
+router.post("/store", Store.createStore);
+router.put("/editStore/:id", Store.editStore);
+router.put("/deleteStore/:id", Store.deleteStore);
+router.get("/store", Store.getAllStore);
+router.get("/store/:id", Store.getStoreById);
 
 // Store Donations
-router.get("/donations/:storeId", Store.getStoreDonations)
-router.patch("/status/:storeId", Store.changeStoreStatus)
-router.delete("/store-donation/:id", Store.deleteStoreDonation)
-
+router.get("/donations/:storeId", Store.getStoreDonations);
+router.patch("/status/:storeId", Store.changeStoreStatus);
+router.delete("/store-donation/:id", Store.deleteStoreDonation);
 
 // Events
-router.post("/event", events.createEvent)
-router.put("/editEvent/:id", events.editEvent)
-router.patch("/eventStatus/:id", events.changeStatus)
-router.patch("/deleteEvent/:id",events.deleteEvent)
-router.get("/event", events.getAllEvents)
-router.get("/event/:id", events.getEventById)
+router.post("/event", events.createEvent);
+router.put("/editEvent/:id", events.editEvent);
+router.patch("/eventStatus/:id", events.changeStatus);
+router.patch("/deleteEvent/:id", events.deleteEvent);
+router.get("/event", events.getAllEvents);
+router.get("/event/:id", events.getEventById);
 
-
-
-
-
-
-
-
+// OrganizationType
+router
+  .route("/org-type")
+  .post(OrganizationType.create)
+  .get(OrganizationType.list);
+router.patch("/org-type/status/:id", OrganizationType.toggleStatus);
 
 module.exports = router;

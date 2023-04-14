@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     const { files } = req;
     console.log(body.type === "Oldage Home");
     const pdf = files.filter((item, i) => item.fieldname === "pdf");
-    const excel = files.filter((item, i) => item.fieldname === "excel");
+    // const excel = files.filter((item, i) => item.fieldname === "excel");
     const photo = files.filter((item, i) => item.fieldname === "photo");
  
     const savedOrganaization = await new Organaization({
