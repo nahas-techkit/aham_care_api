@@ -25,7 +25,7 @@ module.exports = {
         $set: { body },
       });
 
-      res.status(200).json(updatedProfile);
+      res.status(200).json({updatedProfile});
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -97,7 +97,9 @@ module.exports = {
         type: "store",
       }));
       let allDonations = [...orgDon, ...evnDon, ...strDon];
-      res.status(200).json(allDonations);
+
+      allDonations.sort((a, b) => new Date(a.createdAt) + new Date(b.createdAt));
+      res.status(200).json({allDonations});
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

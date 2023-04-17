@@ -8,6 +8,7 @@ const organizationScheama = mongoose.Schema(
       require: [true, "Name is required"],
     },
     type: { type: String,  require: true },
+    typeId:{type:ObjectId, ref:'Division', require:true},
     address: { type: String, require: true },
     photo: { type: String },
     discription: { type: String },

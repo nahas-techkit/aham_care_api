@@ -6,10 +6,11 @@ module.exports = {
     try {
       const { body } = req;
       const { file } = req;
-
+      const{id}=req.user
+     
       const savePost = await new Post({
-        userId: body.userId,
-        image: "/uploads/post/" + file.filename,
+        userId: id,
+        image: "/uploads/post/" + file?.filename,
         discription: body.discription,
       }).save();
 

@@ -5,7 +5,10 @@ module.exports = {
   createStore: async (req, res) => {
     try {
       const { body } = req;
+      const {file} =req
 
+
+      console.log("file", file);
       const savedStore = await new Store({
         item: body.item,
         discription: body.discription,
@@ -14,6 +17,7 @@ module.exports = {
         unitPrice: body.unitPrice,
         totalPrice: body.totalPrice,
         remaining: body.requiremnt,
+        photo:"uploads/images/"+ file?.filename
        
       }).save();
 
@@ -121,4 +125,7 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
+
+
+  
 };

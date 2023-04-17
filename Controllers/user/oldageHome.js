@@ -3,6 +3,7 @@ const OldageHome = require("../../models/organaization");
 module.exports = {
   getAllOldageHome: async (req, res) => {
     try {
+      
       const oldAgeHomes = await OldageHome.find({ type: "Oldage Home" })
         .populate("residence")
         .sort({ createdAt: -1 })

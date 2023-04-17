@@ -12,6 +12,8 @@ const storeDonation = require("../Controllers/user/storeDonation");
 const mapLocation = require("../Controllers/map/getNearbyOrganaization");
 const panCard = require("../Controllers/pancard/pancard");
 const user = require("../Controllers/user/profile");
+const {authenticateToken} = require('../utils/JWT')
+const division = require('../Controllers/user/division')
 // Multer Setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -39,7 +41,7 @@ router.get("/orphanage", orphanage.getAllOrphanage);
 router.post("/donation", donation);
 
 // Social Post
-router.post("/post", upload.single("image"), post.addPost);
+router.post("/post",authenticateToken, upload.single("image"), post.addPost);
 router.post("/reaction", post.reaction);
 router.get("/post", post.getPosts);
 
@@ -66,6 +68,9 @@ router.patch(
   user.addProfilePicture
 );
 router.get('/getDonations/:id', user.getDonations)
+
+// Division 
+router.get('/allDivision',division.getAllDivision )
 
 
 

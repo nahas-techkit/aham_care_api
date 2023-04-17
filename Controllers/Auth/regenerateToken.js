@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
     const { refreshToken } = req.body;
 
     // verify refresh token
-    jwt.verify(refreshToken, process.env.JWT_SECRET, async (err, decoded) => {
+    jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err, decoded) => {
         if (err) {
             return res.status(401).json({ message: 'Invalid refresh token' });
         }

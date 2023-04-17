@@ -1,5 +1,5 @@
-const { findByIdAndUpdate } = require("../../../models/event");
 const Event = require("../../../models/event");
+const EventDonation = require("../../../models/eventDonation");
 
 module.exports = {
   createEvent: async (req, res) => {
@@ -93,6 +93,21 @@ module.exports = {
         .populate("donations")
         .sort({ createdAt: -1 });
       res.status(200).json(event);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  getEventDonations: async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      const donations = await EventDonation.find({
+        eventId,
+        status: { $ne: "Delete" },
+      })
+        .populate("userId")
+        .sort({ createdAt: -1 });
+      res.status(200).json({donations});
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
