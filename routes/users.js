@@ -13,7 +13,17 @@ const mapLocation = require("../Controllers/map/getNearbyOrganaization");
 const panCard = require("../Controllers/pancard/pancard");
 const user = require("../Controllers/user/profile");
 const {authenticateToken} = require('../utils/JWT')
+
+// V2
 const division = require('../Controllers/user/division')
+const Organaization = require('../Controllers/user/organaization')
+
+
+
+
+
+
+
 // Multer Setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -71,6 +81,11 @@ router.get('/getDonations/:id', user.getDonations)
 
 // Division 
 router.get('/allDivision',division.getAllDivision )
+
+// get All Organizations By Division Id
+router.get('/organizations/:typeId',Organaization.getAllorganaization )
+router.get('/organizationsById/:orgId',Organaization.getOrganaizationById )
+
 
 
 

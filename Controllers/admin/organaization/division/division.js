@@ -25,5 +25,15 @@ module.exports = {
     }
   },
 
+  getDivisionById : async (req,res)=>{
+    try {
+      const {id} =req.params
+      const division = await DivisionSchema.findById(id)
+      res.status(200).json(division)
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   
 };

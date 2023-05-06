@@ -3,10 +3,9 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const recidenceSchema = mongoose.Schema(
   {
-    type: {
-      type: String,
-      enum: ["Oldage Home", "Orphanage"],
-      require: true,
+    organaization: {
+      type: ObjectId,
+      ref:'Organization'
     },
     name: {
       type: String,
@@ -14,9 +13,9 @@ const recidenceSchema = mongoose.Schema(
     },
     age: {
       type: Number,
-      required: true,
+      
     },
-    address: {
+    place: {
       type: String,
     },
     photo: {

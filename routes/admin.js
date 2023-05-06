@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const createOldage = require("../Controllers/admin/organaization/createOrganaization");
+const createOrganaization = require("../Controllers/admin/organaization/createOrganaization");
 const addImages = require("../Controllers/admin/organaization/addImages");
 const addRecidence = require("../Controllers/admin/organaization/addRecience");
 const updateOrganaization = require("../Controllers/admin/organaization/updateOrgnaization");
@@ -14,6 +14,7 @@ const eventDonations = require("../Controllers/admin/events/eventDonation");
 const orders = require('../Controllers/admin/orders/orders')
 const division = require ('../Controllers/admin/organaization/division/division')
 const organaization = require ('../Controllers/admin/organaization/division/organization')
+const requirement = require ('../Controllers/admin/organaization/division/addRequirement')
 
 const OrganizationType = require("../Controllers/admin/organization-type");
 
@@ -42,9 +43,9 @@ const upload = multer({ storage: storage });
 // Multer
 
 // Organization Routs
-router.post("/organaization", upload.any(), createOldage);
+router.post("/organaization", upload.any(), createOrganaization);
 router.post("/addImages", upload.any(), addImages);
-router.post("/addRecidence", upload.single("photo"), addRecidence);
+
 
 router.put("/organaization/:id", updateOrganaization.updateOrganaization);
 router.put(
@@ -64,7 +65,7 @@ router.put(
 );
 
 router.post("/addImages/:id", upload.any(), addImages);
-router.post("/addRecidence/:id", upload.single("photo"), addRecidence);
+// router.post("/addRecidence/:id", upload.single("photo"), addRecidence);
 router.get("/getOldageHome", oldageHome.getAllOldageHome);
 router.get("/getOldageHome/:id", oldageHome.getOldageHomeById);
 router.get("/orphange", orphange.getAllOrphanage);
@@ -116,17 +117,20 @@ router.get('/eventOrders', orders.getAllEventOrders)
 // Divisions
 router.post('/createDivision',division.createDivison)
 router.get('/division',division.getAllDivision)
+router.get('/division/:id',division.getDivisionById)
 
 // Organization 
-router.get('/organaizatioByType/:typeId',organaization.getOrgnaizationByType)
+router.get('/organaizatioByType/:typeId', organaization.getOrgnaizationByType)
+router.get('/organaizatioById/:id', organaization.getOrgnaizationById)
+
+// Requirement 
+router.post('/requirement/:orgId', requirement.addRequirement)
+
+// Attendece
+router.post("/addRecidence/:orgId", upload.single("photo"), addRecidence);
 
 
-// OrganizationType
-router
-  .route("/org-type")
-  .post(OrganizationType.create)
-  .get(OrganizationType.list);
-router.patch("/org-type/status/:id", OrganizationType.toggleStatus);
+
 
 
 module.exports = router;

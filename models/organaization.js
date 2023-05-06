@@ -14,7 +14,7 @@ const organizationScheama = mongoose.Schema(
     discription: { type: String },
     galleryPhotos: [],
     residence: [{ type: ObjectId, ref: "Recidence" }],
-    requirement: { type: ObjectId, ref: "Requirement" },
+    requirement: [{ type: ObjectId, ref: "Requirement" }],
     donations: { type: ObjectId, ref: "Donations" },
     documents: { type: String },
     email:{type:String, require:true},

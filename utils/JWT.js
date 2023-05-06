@@ -9,21 +9,6 @@ function generateRefreshToken(user) {
 }
 
 
-// function authenticateToken(req,res,next){
-//     const authHeader = req.headers['authorization'];
-//     const token = authHeader && authHeader.split('')[1]
-//     console.log("=>",token);
-//     if(!token){
-//         returnres.status(400).json({message:"Authorization token is missing"})
-//     }
-
-//     jwt.verify(token, process.env.TOKEN_SECRET,(err,user)=>{
-//         if(err) return res.status(400).json({error: "Access token expired"})
-//         req.user=user
-//         next()
-//     } )
-// }
-
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
