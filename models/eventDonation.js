@@ -7,7 +7,7 @@ const eventDonationSchema = mongoose.Schema({
     paymentId:{type:String, require:true},
     donatedTickets:{type:Number, require:true},
     totalAmount:{type:Number, require:true},
-    status:{type:String, require:true, enum:["Received", "Processing", "Completed"], default:"Active"}
+    status:{type:String, require:true, enum:["Pending", "Processing", "Completed"], default:"Pending"}
 },
 {
     timestamps: true,

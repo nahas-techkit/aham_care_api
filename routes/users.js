@@ -55,7 +55,7 @@ router.post("/post",authenticateToken, upload.single("image"), post.addPost);
 router.post("/reaction", post.reaction);
 router.get("/post", post.getPosts);
 
-// Event Donation
+// Event and Store Donation
 router.post("/eventDonation", eventDonation);
 router.post("/storeDonation", storeDonation);
 router.get("/store", Store.getAllStore);

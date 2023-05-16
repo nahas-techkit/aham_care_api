@@ -9,6 +9,7 @@ const requirementScheam = mongoose.Schema(
     requirementUnit: { type: String, required: true },
     totalPrice: { type: Number, required: true },
     unitPrice: { type: Number, required: true },
+    status: { type: String, default:'Active', enum: ['Active','Inactive','Fulfilled']},
     needs: String,
   },
   {

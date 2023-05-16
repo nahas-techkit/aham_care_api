@@ -16,7 +16,7 @@ const donationSchema = mongoose.Schema(
     ],
     totalPrice: Number,
     transactionId: String,
-    status: { type: String, enum: ["Pending", "Recived"] },
+    status: { type: String, enum: ["Pending", "Processing","Completed"], default: "Pending"},
   },
   {
     timestamps: true,

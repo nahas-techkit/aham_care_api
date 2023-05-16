@@ -1,7 +1,7 @@
 const EventDonation = require("../../models/eventDonation");
 const Event = require("../../models/event");
 
-module.exports = async (req, res) => {
+  module.exports = async (req, res) => {
   try {
     const { body } = req;
     const { remainingTickets } = await Event.findById(body.eventId);

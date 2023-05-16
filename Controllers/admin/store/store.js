@@ -1,12 +1,12 @@
 const Store = require("../../../models/store");
 const StoreDonations = require("../../../models/storeDonation");
+const deleteFile = require ('../../../lib/deleteFiles')
 
 module.exports = {
   createStore: async (req, res) => {
     try {
       const { body } = req;
-      const {file} =req
-
+      const { file } = req;
 
       console.log("file", file);
       const savedStore = await new Store({
@@ -17,8 +17,7 @@ module.exports = {
         unitPrice: body.unitPrice,
         totalPrice: body.totalPrice,
         remaining: body.requiremnt,
-        photo:"uploads/images/"+ file?.filename
-       
+        photo: "uploads/images/" + file?.filename,
       }).save();
 
       res
@@ -33,14 +32,29 @@ module.exports = {
     try {
       const { body } = req;
       const { id } = req.params;
+      const { file } = req;
 
       const editedStore = await Store.findByIdAndUpdate(
         id,
         {
-          $set: body,
+          item: body.item,
+          discription: body.discription,
+          requirement: body.requiremnt,
+          unit: body.unit,
+          unitPrice: body.unitPrice,
+          totalPrice: body.totalPrice,
+          remaining: body.requiremnt,
         },
         { new: true }
       );
+
+      if (file) {
+        await Store.findByIdAndUpdate(id, {
+          photo: "uploads/images/" + file?.filename,
+        });
+
+        await deleteFile('public/'+ editedStore.photo)
+      }
 
       res
         .status(200)
@@ -104,8 +118,8 @@ module.exports = {
     try {
       const { storeId } = req.params;
       const { status } = req.body;
-      console.log(storeId, status);
-      await StoreDonations.findByIdAndUpdate(storeId, {
+      console.log('id=>',storeId, status );
+      await Store.findByIdAndUpdate(storeId, {
         $set: { status: status },
       });
       res.status(200).json({ message: `Status Change to ${status}` });
@@ -125,7 +139,4 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
-
-
-  
 };

@@ -8,7 +8,7 @@ const organizationScheama = mongoose.Schema(
       require: [true, "Name is required"],
     },
     type: { type: String,  require: true },
-    typeId:{type:ObjectId, ref:'Division', require:true},
+    typeId:{type:ObjectId, ref:'Division', require:true, index: true},
     address: { type: String, require: true },
     photo: { type: String },
     discription: { type: String },
@@ -20,6 +20,7 @@ const organizationScheama = mongoose.Schema(
     email:{type:String, require:true},
     phone:{type:String, require:true},
     place:{type:String, require:true},
+    status:{type:String, require:true, enum:['Active', 'Inactive'], default: 'Active'},
   },
   {
     timestamps: true,

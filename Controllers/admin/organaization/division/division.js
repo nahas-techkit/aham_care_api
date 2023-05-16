@@ -18,7 +18,7 @@ module.exports = {
 
   getAllDivision : async (req,res)=>{
     try {
-        const allDivisions = await DivisionSchema.find()
+        const allDivisions = await DivisionSchema.find().sort({order:1})
         res.status(200).json(allDivisions)
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -31,6 +31,24 @@ module.exports = {
       const division = await DivisionSchema.findById(id)
       res.status(200).json(division)
     } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  changeDivisionOrder:async (req,res)=>{
+    try {
+      const arrayData = req.body
+      const newOrder =  arrayData.map(async (item)=>{
+        const items = await DivisionSchema.findByIdAndUpdate(item._id,{
+          order:item?.order
+        }, {new:true})
+        console.log(items,'<-');
+      })
+
+      res.status(200).json({message: 'OK'});
+
+    } catch (error) {
+      console.log(error.message);
       res.status(500).json({ message: error.message });
     }
   }

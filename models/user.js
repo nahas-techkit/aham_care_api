@@ -3,7 +3,6 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const userSchema = mongoose.Schema(
   {
-   
     name: {
       type: String,
       required: [true, "name is required"],
@@ -11,15 +10,17 @@ const userSchema = mongoose.Schema(
     email: {
       type: String,
       required: [true, "email is required"],
+      unique: true,
+      index: { sparse: true },
     },
     phone_no: {
       type: String,
       required: [true, "Phone Number is Required"],
     },
 
-    panCardNo:String,
-    aadharNo:String,
-    profilePicture:String,
+    panCardNo: String,
+    aadharNo: String,
+    profilePicture: String,
     password: {
       type: String,
       required: [true, "Password is Required"],

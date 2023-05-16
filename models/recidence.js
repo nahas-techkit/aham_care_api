@@ -22,6 +22,7 @@ const recidenceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    status:{type:String, required:true, enum:['Active', 'Inactive'], default:'Active',}
   },
   {
     timestamps: true,

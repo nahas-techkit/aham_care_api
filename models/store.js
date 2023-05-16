@@ -10,7 +10,7 @@ const storeSchema = mongoose.Schema(
     unitPrice: Number,
     totalPrice: Number,
     remaining: { type: Number, required: true },
-    status: { type: String, required: true, default: "Active" },
+    status: { type: String, required: true, default: "Active", enum:['Active', 'Inactive', 'Fullfilled'] },
     donations: [
       {
         type: ObjectId,

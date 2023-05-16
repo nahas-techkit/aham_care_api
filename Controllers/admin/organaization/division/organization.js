@@ -3,6 +3,7 @@ const Organaization = require("../../../../models/organaization");
 module.exports = {
   getOrgnaizationByType: async (req, res) => {
     const { typeId } = req.params;
+    
     try {
       const organaizations = await Organaization.find({ typeId });
       res.status(200).json(organaizations);
@@ -23,4 +24,6 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
+
+ 
 };

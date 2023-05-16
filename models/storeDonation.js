@@ -9,7 +9,7 @@ const storeDonationSchema = mongoose.Schema(
     donatedAmount: { type: Number, require: true },
     status: {
       type: String,
-      enum: ["Received", "Processing", "Completed", "Deleted"],
+      enum: ["Received", "Processing", "Completed", "Inactive"],
       default: "Received",
     },
   },

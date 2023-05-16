@@ -32,14 +32,21 @@ module.exports = {
       const editedEvent = await Event.findByIdAndUpdate(
         id,
         {
-          $set: body,
+        event: body.event,
+        discription: body.discription,
+        totalTickets: body.totalTickets,
+        startDateTime: body.startDateTime,
+        endDateTime: body.endDateTime,
+        totalPrice: body.totalPrice,
+        unitPrice: body.unitPrice,
+        remainingTickets: body.totalTickets,
         },
         { new: true }
       );
 
       res
         .status(200)
-        .json({ message: "Event updated successfully", editedEvent });
+        .json({ message: "Event updated successfully"});
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

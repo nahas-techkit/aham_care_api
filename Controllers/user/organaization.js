@@ -18,13 +18,13 @@ module.exports = {
     try {
         const {orgId} =req.params;
         console.log(orgId);
-        const organization = await Organization.findById(orgId).populate("residence")
+        const organization = await Organization.findById(orgId).populate({
+          path: 'residence',
+          match: { status: 'Active' }
+        })
         .sort({ createdAt: -1 })
         .populate("requirement")
         .sort({ createdAt: -1 });
-
-        
-
         res.status(200).json({ organization});
         
     } catch (error) {
