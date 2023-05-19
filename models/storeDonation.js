@@ -12,7 +12,10 @@ const storeDonationSchema = mongoose.Schema(
       enum: ["Received", "Processing", "Completed", "Inactive"],
       default: "Received",
     },
+    invoiceNo:{ type:String, require: true}
   },
+
+
   {
     timestamps: true,
   }

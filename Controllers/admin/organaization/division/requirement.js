@@ -14,6 +14,7 @@ module.exports = {
         totalPrice: body.totalPrice,
         unitPrice: body.unitPrice,
         needs: body.requirement,
+        balancePrice:body.balancePrice,
       }).save();
 
       const organaization = await Organization.findByIdAndUpdate(
@@ -89,6 +90,7 @@ module.exports = {
         totalPrice: body.totalPrice,
         unitPrice: body.unitPrice,
         needs: body.requirement,
+        
       });
       res.status(200).json({ message: "Requirement updated successfully" });
     } catch (error) {

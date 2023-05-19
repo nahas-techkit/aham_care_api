@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "1hr" });
+  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "30d" });
 }
 
 function generateRefreshToken(user) {
-  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "30d" });
+  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "60d" });
 }
 
 

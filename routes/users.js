@@ -14,14 +14,6 @@ const panCard = require("../Controllers/pancard/pancard");
 const user = require("../Controllers/user/profile");
 const {authenticateToken} = require('../utils/JWT')
 
-// V2
-const division = require('../Controllers/user/division')
-const Organaization = require('../Controllers/user/organaization')
-
-
-
-
-
 
 
 // Multer Setup
@@ -41,6 +33,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 /* ============================================================== */
+// V2
+const division = require('../Controllers/user/division')
+const Organaization = require('../Controllers/user/organaization')
 
 
 /* Get Organaization */
@@ -58,6 +53,8 @@ router.get("/post", post.getPosts);
 // Event and Store Donation
 router.post("/eventDonation", eventDonation);
 router.post("/storeDonation", storeDonation);
+
+// Store
 router.get("/store", Store.getAllStore);
 
 // Event

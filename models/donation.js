@@ -6,6 +6,7 @@ const donationSchema = mongoose.Schema(
     organaizationId: { type: ObjectId, ref: "Organization" },
     userId: { type: ObjectId, ref: "User" },
     requirmentId: { type: ObjectId, ref: "Requirement" },
+    invoiceNo:{type:String},
 
     donatedItems: [
       {

@@ -4,7 +4,7 @@ module.exports = {
   getAllorganaization: async (req, res) => {
     try {
       const { typeId } = req.params;
-      const organization = await Organization.find({ typeId }).sort({
+      const organization = await Organization.find({typeId}).sort({
         createdAt: -1,
       });
 
@@ -23,7 +23,10 @@ module.exports = {
           match: { status: 'Active' }
         })
         .sort({ createdAt: -1 })
-        .populate("requirement")
+        .populate({
+          path: 'requirement',
+          match: { status: 'Active' }
+        })
         .sort({ createdAt: -1 });
         res.status(200).json({ organization});
         

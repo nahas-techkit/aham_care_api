@@ -1,5 +1,6 @@
 const Store = require("../../models/store");
 const StoreDonation = require("../../models/storeDonation");
+const generateInvoiceNo = require("../../lib/generateInvoiceNo");
 
 module.exports = async (req, res) => {
   try {
@@ -15,12 +16,14 @@ module.exports = async (req, res) => {
     }
 
 
+    const invoiceNo= await generateInvoiceNo()
 
     const savedStoreDonation = await new StoreDonation({
       userId: body.userId,
       storeId: body.storeId,
       paymentId: body.paymentId,
       donatedAmount: body.donatedAmount,
+      invoiceNo,
     }).save();
 
     const store = await Store.findByIdAndUpdate(savedStoreDonation.storeId, {

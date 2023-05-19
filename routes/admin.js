@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const createOrganaization = require("../Controllers/admin/organaization/createOrganaization");
+const updateOrganaization = require("../Controllers/admin/organaization/updateOrgnaization");
 const addImages = require("../Controllers/admin/organaization/addImages");
 const Recidence = require("../Controllers/admin/organaization/addRecience");
-const updateOrganaization = require("../Controllers/admin/organaization/updateOrgnaization");
 const Store = require("../Controllers/admin/store/store");
 const events = require("../Controllers/admin/events/events");
 const oldageHome = require("../Controllers/user/oldageHome");
@@ -48,25 +48,11 @@ const upload = multer({ storage: storage });
 
 // Organization Routs
 router.post("/organaization", upload.any(), createOrganaization);
+router.put("/organaization/:id", upload.any(), updateOrganaization.updateOrganaization);
 router.post("/addImages", upload.any(), addImages);
 
 
-router.put("/organaization/:id", updateOrganaization.updateOrganaization);
-router.put(
-  "/requirement/:id",
-  upload.single("excel"),
-  updateOrganaization.updateRequirement
-);
-router.put(
-  "/documents/:id",
-  upload.single("pdf"),
-  updateOrganaization.updateDocument
-);
-router.put(
-  "/updateCoverPicture/:id",
-  upload.single("photo"),
-  updateOrganaization.updateCoverPicture
-);
+;
 
 router.post("/addImages/:id", upload.any(), addImages);
 // router.post("/addRecidence/:id", upload.single("photo"), addRecidence);
@@ -123,7 +109,9 @@ router.get('/eventOrders', orders.getAllEventOrders)
 router.post('/createDivision',division.createDivison)
 router.get('/division',division.getAllDivision)
 router.get('/division/:id',division.getDivisionById)
+router.put('/division/:id',division.updateDivision)
 router.post('/division-order/',division.changeDivisionOrder)
+router.patch('/division-status/:id',division.changeStatus)
 
 // Organization 
 router.get('/organaizatioByType/:typeId', organaization.getOrgnaizationByType)

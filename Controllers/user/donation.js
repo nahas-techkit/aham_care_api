@@ -1,21 +1,28 @@
 const Donation = require("../../models/donation");
 const Requirement = require("../../models/requirment");
-const User = require("../../models/user")
+const User = require("../../models/user");
 const { sendmail } = require("../../lib/regardMail");
+const generateInvoice = require("../../lib/generateInvoiceNo");
+const moment = require("moment");
+
 
 module.exports = async (req, res) => {
   try {
     const { body } = req;
+
+    const invoiceNo =await generateInvoice();
+
     const savedDonation = await new Donation({
       organaizationId: body.organaizationId,
       userId: body.userId,
       requirmentId: body.requirmentId,
+      invoiceNo,
       donatedItems: body.donatedItems,
       totalPrice: body.totalPrice,
       transactionId: body.transactionId,
     }).save();
 
-    const {email} = await User.findById(body.userId)
+    const { email } = await User.findById(body.userId);
 
     const { requirement } = await Requirement.findById(
       savedDonation.requirmentId
@@ -38,11 +45,11 @@ module.exports = async (req, res) => {
       { new: true }
     );
 
-    sendmail({
-      to: email,
-      from: "rishad@techkit.in",
-      subject: "hello this message from ahamcare",
-    });
+    // sendmail({
+    //   to: email,
+    //   from: "rishad@techkit.in",
+    //   subject: "hello this message from ahamcare",
+    // });
 
     res.status(200).json(updatedNeeds);
   } catch (error) {

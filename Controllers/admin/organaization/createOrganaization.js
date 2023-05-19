@@ -1,7 +1,7 @@
 const Organaization = require("../../../models/organaization");
 const Divisions = require("../../../models/division");
-const { addRequirment } = require("./addRequirments");
 const uploadFiles = require("../../../utils/uploads/uploadFiles");
+const deleteFile = require("../../../lib/deleteFiles");
 
 module.exports = async (req, res) => {
   try {
@@ -12,7 +12,8 @@ module.exports = async (req, res) => {
     const pdf = uploadedFile.filter((item, i) => item.fieldname === "pdf");
     const photo = uploadedFile.filter((item, i) => item.fieldname === "photo");
 
-    console.log("pdf", uploadedFile);
+    console.log("pdf", pdf);
+    console.log("photo", photo);
 
     const savedOrganaization = await new Organaization({
       typeId: body.typeId,
@@ -20,16 +21,21 @@ module.exports = async (req, res) => {
       name: body.name,
       address: body.address,
       discription: body.discription,
-      photo: "uploads/images/" + photo[0].filename,
-      documents: "uploads/pdf/" + pdf[0].filename,
+      photo: photo[0].path,
+      documents: pdf[0].path,
       place: body.place,
       email: body.email,
       phone: body.phone_no,
     }).save();
 
+    await deleteFile("public/"+ pdf.path);
+    await deleteFile("public/"+ photo.path);
+
     res.status(200).json({
       message: "Organaization created successfully",
     });
+
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

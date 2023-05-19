@@ -6,6 +6,7 @@ var logger = require('morgan');
 const mongoose = require("mongoose")
 require("dotenv").config()
 var cors = require("cors")
+const {authenticateToken} = require('./utils/JWT')
 
 var authRouter = require('./routes/auth');
 var adminRouter= require('./routes/admin')
@@ -26,8 +27,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/admin', adminRouter )
-app.use('/api/v1/user', usersRouter )
+app.use('/api/v1/admin',authenticateToken, adminRouter )
+app.use('/api/v1/user',authenticateToken, usersRouter )
 
 
 // Mongoose Connection
