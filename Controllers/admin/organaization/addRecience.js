@@ -1,6 +1,8 @@
 const Organaization = require("../../../models/organaization");
 const Recidence = require("../../../models/recidence");
 const deleteFile = require('../../../lib/deleteFiles');
+const uploadFiles = require("../../../utils/uploads/uploadFiles");
+const deleteCloudeFile = require("../../../utils/uploads/deleteCloudeFile");
 
 module.exports = {
   addRecidence: async (req, res) => {
@@ -9,15 +11,17 @@ module.exports = {
       const { orgId } = req.params;
       const { file } = req;
 
-      console.log("messaGE-", body.name, orgId);
+      const uploadFile = await uploadFiles(file)
 
       const savedRecidence = await new Recidence({
         organaization: orgId,
         name: body.name,
         age: body.age,
         place: body.place,
-        photo: "/uploads/images/" + file.filename,
+        photo: uploadFile[0].path,
       }).save();
+
+      await deleteFile(file?.destination)
 
       const addId = await Organaization.findByIdAndUpdate(
         orgId,
@@ -81,22 +85,22 @@ module.exports = {
       const { body } = req;
       const { file } = req;
 
-      console.log(attId);
-
-
-
-      const  {photo} = await Recidence.findById(attId);
-      await Recidence.findByIdAndUpdate(attId, {
+     const updatedRecident = await Recidence.findByIdAndUpdate(attId, {
         name: body.name,
         age: body.age,
         place: body.place,
-      });
+      }, {new: true});
 
       if(file){
-        const updateImage = await Recidence.findByIdAndUpdate(attId, {
-          photo: "/uploads/images/" + file.filename,
+       const uploadedFile = await uploadFiles(file);
+        await Recidence.findByIdAndUpdate(attId, {
+          photo: uploadedFile[0].path,
         });
-        deleteFile("public/"+photo )
+
+        const respo = await deleteCloudeFile(updatedRecident.photo);
+        console.log('cl->', respo);
+        const response = await deleteFile("public" + uploadedFile[0].path);
+        console.log('dl->', response);
       }
 
       res.status(200).json({message:'Updated successfully'})

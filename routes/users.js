@@ -44,9 +44,10 @@ router.get("/orphanage", orphanage.getAllOrphanage);
 
 /* Donation */
 router.post("/donation", donation);
+// router.post("/donation", donation);
 
 // Social Post
-router.post("/post",authenticateToken, upload.single("image"), post.addPost);
+router.post("/post", upload.single("image"), post.addPost);
 router.post("/reaction", post.reaction);
 router.get("/post", post.getPosts);
 

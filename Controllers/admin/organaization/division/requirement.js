@@ -14,7 +14,7 @@ module.exports = {
         totalPrice: body.totalPrice,
         unitPrice: body.unitPrice,
         needs: body.requirement,
-        balancePrice:body.balancePrice,
+        balancePrice:body.totalPrice,
       }).save();
 
       const organaization = await Organization.findByIdAndUpdate(
@@ -27,6 +27,7 @@ module.exports = {
       console.log(organaization);
       res.status(200).json({ message: "Requirement added successfully" });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: error.message });
     }
   },

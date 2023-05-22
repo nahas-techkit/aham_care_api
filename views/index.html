@@ -1,19 +1,4 @@
-const nodemailer = require("nodemailer");
-
-// Create a new transporter
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  service: "gmail",
-  port: 587,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_ADDRESS,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
-
-const sendMail = async (toEmail, subject, userName, amount) => {
-  const htmlContent = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -100,11 +85,11 @@ const sendMail = async (toEmail, subject, userName, amount) => {
           </div>
         </div>
         <h1>Support Our Cause</h1>
-        <p>Dear ${userName} ,</p>
+        <p>Dear [Name of User]//////,</p>
         <p>
           We hope this email finds you in good health and high spirits. On
           behalf of AahamCare, we want to express our sincere gratitude for your
-          recent donation of ₹ ${amount}. Your support and generosity mean the
+          recent donation of [$500]//////. Your support and generosity mean the
           world to us and will go a long way in assisting our mission to provide
           essential care and support to those in need.
         </p>
@@ -150,7 +135,7 @@ const sendMail = async (toEmail, subject, userName, amount) => {
 
             If you have any questions or need further assistance, feel free to
             contact us at <br />
-            <a href="mailto:info@aahamcare.com"> info@aahamcare.com</a> or +91 9035
+            <a href="info@aahamcare.com"> info@aahamcare.com</a> or +91 9035
             9477 04
           </p>
         </div>
@@ -158,26 +143,3 @@ const sendMail = async (toEmail, subject, userName, amount) => {
     </body>
   </body>
 </html>
-`;
-  // Create a new message
-  const message = {
-    from: "nahasapofficial@gmail.com",
-    to: toEmail,
-    subject: subject,
-    secure: true,
-    html: htmlContent,
-  };
-
-  // Send The message
-  transporter.sendMail(message, (err, info) => {
-    if (err) {
-      console.log("err->", err);
-      throw err;
-    }
-    console.log("Message sent: ", info.messageId);
-  });
-  
-  return true;
-};
-
-module.exports = { sendMail };

@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/admin',authenticateToken, adminRouter )
-app.use('/api/v1/user',authenticateToken, usersRouter )
+app.use('/api/v1/user', usersRouter )
 
 
 // Mongoose Connection

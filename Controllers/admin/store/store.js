@@ -1,12 +1,16 @@
 const Store = require("../../../models/store");
 const StoreDonations = require("../../../models/storeDonation");
-const deleteFile = require ('../../../lib/deleteFiles')
+const deleteFile = require("../../../lib/deleteFiles");
+const uploadFiles = require("../../../utils/uploads/uploadFiles");
+const deleteCloudeFiles = require("../../../utils/uploads/deleteCloudeFile");
 
 module.exports = {
   createStore: async (req, res) => {
     try {
       const { body } = req;
       const { file } = req;
+      const uploadedFile = await uploadFiles(file);
+      console.log("upFile->", uploadedFile);
 
       console.log("file", file);
       const savedStore = await new Store({
@@ -17,13 +21,16 @@ module.exports = {
         unitPrice: body.unitPrice,
         totalPrice: body.totalPrice,
         remaining: body.requiremnt,
-        photo: "uploads/images/" + file?.filename,
+        photo: uploadedFile[0].path,
       }).save();
+
+      await deleteFile('public' + uploadedFile[0].path);
 
       res
         .status(200)
         .json({ savedStore, message: "Store created successfully" });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: error.message });
     }
   },
@@ -48,18 +55,22 @@ module.exports = {
         { new: true }
       );
 
+
       if (file) {
+        const uploadedFile = await uploadFiles(file);
         await Store.findByIdAndUpdate(id, {
-          photo: "uploads/images/" + file?.filename,
+          photo: uploadedFile[0].path,
         });
 
-        await deleteFile('public/'+ editedStore.photo)
+        const respo = await deleteCloudeFiles(editedStore.photo);
+        const response = await deleteFile("public" + uploadedFile[0].path);
       }
 
       res
         .status(200)
         .json({ message: "Store Updated Successfully", editedStore });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: error.message });
     }
   },
@@ -118,7 +129,7 @@ module.exports = {
     try {
       const { storeId } = req.params;
       const { status } = req.body;
-      console.log('id=>',storeId, status );
+      console.log("id=>", storeId, status);
       await Store.findByIdAndUpdate(storeId, {
         $set: { status: status },
       });

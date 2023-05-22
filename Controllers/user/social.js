@@ -1,5 +1,7 @@
-const { default: mongoose } = require("mongoose");
+
 const Post = require("../../models/post");
+const deleteFiles = require('../../lib/deleteFiles')
+const uploadToCloud =  require('../../utils/uploads/uploadFiles')
 
 module.exports = {
   addPost: async (req, res) => {
@@ -7,13 +9,24 @@ module.exports = {
       const { body } = req;
       const { file } = req;
       const{id}=req.user
-     
+
       const savePost = await new Post({
         userId: id,
-        image: "/uploads/post/" + file?.filename,
         discription: body.discription,
-      }).save();
+      });
 
+      if (file) {
+        const upLoadImage =await uploadToCloud(file)
+        console.log(upLoadImage);
+        savePost.image = upLoadImage[0].path
+        const response = await deleteFiles('public'+ upLoadImage[0].path)
+        console.log(response,'->res');
+      }
+
+      console.log('log');
+
+      await savePost.save()
+      
       res.status(200).json({ message: "Post added successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });

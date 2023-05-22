@@ -46,15 +46,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 // Multer
 
-// Organization Routs
+// Organization Routs//
+
 router.post("/organaization", upload.any(), createOrganaization);
 router.put("/organaization/:id", upload.any(), updateOrganaization.updateOrganaization);
 router.post("/addImages", upload.any(), addImages);
-
-
-;
-
 router.post("/addImages/:id", upload.any(), addImages);
+
 // router.post("/addRecidence/:id", upload.single("photo"), addRecidence);
 router.get("/getOldageHome", oldageHome.getAllOldageHome);
 router.get("/getOldageHome/:id", oldageHome.getOldageHomeById);
@@ -64,9 +62,7 @@ router.get("/orphange/:id", orphange.getOrphangeById);
 // Store
 
 router.post("/store", upload.single("photo"), Store.createStore);
-
 router.post("/store", Store.createStore);
-
 
 router.put("/deleteStore/:id", Store.deleteStore);
 router.get("/store", Store.getAllStore);
