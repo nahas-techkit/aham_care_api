@@ -3,15 +3,15 @@ const Requirement = require("../../models/requirment");
 const User = require("../../models/user");
 const { sendMail } = require("../../lib/regardMail");
 const getPaymentDetails = require("../../lib/getPaymentDetails");
+const chechPaymentAmount = require("../../lib/compareWithTolerance");
 const generateInvoice = require("../../lib/generateInvoiceNo");
 const user = require("../../models/user");
 
 module.exports = async (req, res) => {
   try {
     const { body } = req;
+    const { id } = req.user;
 
-    const {id} = req.user;
-    
     const invoiceNo = await generateInvoice();
     const paymentDetails = await getPaymentDetails(body?.paymentId);
 
@@ -25,6 +25,7 @@ module.exports = async (req, res) => {
 
     let grandTotal = 0;
 
+    // Analyse order details
     const donatedItems = await Promise.all(
       body?.donatedItems.map(async (item) => {
         console.log("item", item);
@@ -65,60 +66,43 @@ module.exports = async (req, res) => {
       })
     );
 
+    // Verify Amount
+    const isAmountCurect = await chechPaymentAmount(
+      grandTotal,
+      paymentDetails?.amount / 100
+    );
+    console.log(isAmountCurect);
 
-    console.log("di->", donatedItems);
-    console.log("gt->", grandTotal);
-
+    // Save donation order information
     const savedDonation = await new Donation({
-      organaizationId:organization,
-      userId: body.userId,
-      requirmentId: body.requirmentId,
+      organaizationId: organization,
+      userId: id,
       invoiceNo,
-      donatedItems: body.donatedItems,
-      totalPrice: body.totalPrice,
-      transactionId: body.transactionId,
+      donatedItems,
+      totalPrice: grandTotal,
+      paymentId: body.paymentId,
     }).save();
 
+    // Send email notification
     const { email, name } = await User.findById(id);
+    const eMail = await sendMail(
+      email,
+      "Heartfelt Thanks for Your Donation via AahamCare",
+      name,
+      body.totalPrice
+    );
 
-    // const { requirement } = await Requirement.findById(
-    //   savedDonation.requirmentId
-    // );
+    let message = "";
+    if (eMail) {
+      console.log("email send successful");
+      message = ",Please check your email";
+    } else {
+      console.log("email failed");
+    }
 
-    // savedDonation.donatedItems.forEach((element) => {
-    //   let matchedIndex = requirement.findIndex(
-    //     (obj) => obj.item == element.item
-    //   );
-    //   if (matchedIndex === -1) return;
-
-    //   requirement[matchedIndex].needs -= element.quantity;
-    // });
-
-    // const updatedNeeds = await Requirement.findByIdAndUpdate(
-    //   savedDonation.requirmentId,
-    //   {
-    //     $set: { requirement },
-    //   },
-    //   { new: true }
-    // );
-
-    // const eMail = await sendMail(
-    //   email,
-    //   "Heartfelt Thanks for Your Donation via AahamCare",
-    //   name,
-    //   body.totalPrice
-    // );
-
-    // let message = "";
-    // if (eMail) {
-    //   console.log("email send successful");
-    //   message = ",Please check your email";
-    // } else {
-    //   console.log("email failed");
-    // }
-
-    res.status(200).json(donatedItems);
-    // .json(`Heartfelt Thanks for Your Donation via AahamCare ${message}`);
+    res
+      .status(200)
+      .json(`Heartfelt Thanks for Your Donation via AahamCare ${message}`);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
