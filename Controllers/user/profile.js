@@ -3,6 +3,8 @@ const Donations = require("../../models/donation");
 const EventDonation = require("../../models/eventDonation");
 const StoreDonation = require("../../models/storeDonation");
 const deleteFile = require("../../lib/deleteFiles");
+const uploadedFiles = require("../../utils/uploads/uploadFiles");
+const deleteCloudeFiles = require("../../utils/uploads/deleteCloudeFile");
 const organaization = require("../../models/organaization");
 
 module.exports = {
@@ -18,52 +20,48 @@ module.exports = {
 
   editProfile: async (req, res) => {
     try {
-      // const { id } = req.params;
-      const id = req.user.id
+      const id = req.user.id;
       const { body } = req;
-
-      const updatedProfile = await User.findByIdAndUpdate(id, {
-        $set: { body },
-      });
-
-      res.status(200).json({updatedProfile});
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  },
-
-  addProfilePicture: async (req, res) => {
-    try {
-      // const { id } = req.params;
-      const id = req.user.id
       const { file } = req;
 
-      const user = await User.findById(id);
-      const dpImage = await User.findByIdAndUpdate(
+      const updatedProfile = await User.findByIdAndUpdate(
         id,
         {
-          profilePicture: "uploads/profile/" + file.filename,
+          name: body?.name,
+          email: body?.email,
+          phone_no: body?.phone_no,
+          dateOfBirth: body?.dateOfBirth,
+          address: body?.address,
+          work: body?.work,
+          panCardNo: body?.panCardNo,
+          aadharNo: body?.aadharNo,
         },
         { new: true }
       );
 
-      if (user.profilePicture) {
-        await deleteFile("public/" + user.profilePicture);
+      if (file) {
+        const uploadedFile = await uploadedFiles(file);
+        const updateProfileImage = await User.findByIdAndUpdate(id, {
+          profilePicture: uploadedFile[0].path,
+        });
+
+        const respo = await deleteCloudeFiles(updatedProfile?.profilePicture);
+        await deleteFile("public" + uploadedFile[0].path);
       }
 
-      res
-        .status(200)
-        .json({ message: "Profile picture updated successfully", dpImage });
+      res.status(200).json({ message:"Profile updated successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
+
+  
 
   getDonations: async (req, res) => {
     try {
       console.log("donations");
       // const { id } = req.params;
-      const id = req.user.id
+      const id = req.user.id;
       const donations = await Donations.find({ userId: id })
         .populate({
           path: "organaizationId",
@@ -101,8 +99,10 @@ module.exports = {
       }));
       let allDonations = [...orgDon, ...evnDon, ...strDon];
 
-      allDonations.sort((a, b) => new Date(a.createdAt) + new Date(b.createdAt));
-      res.status(200).json({allDonations});
+      allDonations.sort(
+        (a, b) => new Date(a.createdAt) + new Date(b.createdAt)
+      );
+      res.status(200).json({ allDonations });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

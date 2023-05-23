@@ -69,12 +69,7 @@ router.get("/pancard", panCard);
 
 // User Profile
 router.get("/user", user.getProfileById);
-router.put("/user", user.editProfile);
-router.patch(
-  "/userProfile",
-  upload.single("profilePicture"),
-  user.addProfilePicture
-);
+router.put("/user",upload.single("profilePicture"), user.editProfile);
 router.get('/getDonations', user.getDonations)
 
 // Division 
