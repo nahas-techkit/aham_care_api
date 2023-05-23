@@ -4,42 +4,82 @@ const User = require("../../models/user");
 const { sendMail } = require("../../lib/regardMail");
 const getPaymentDetails = require("../../lib/getPaymentDetails");
 const generateInvoice = require("../../lib/generateInvoiceNo");
+const user = require("../../models/user");
 
 module.exports = async (req, res) => {
   try {
     const { body } = req;
-    const userId = req.user.id
+
+    const {id} = req.user;
+    
     const invoiceNo = await generateInvoice();
-    const paymentDetails = await getPaymentDetails(body?.transactionId);
+    const paymentDetails = await getPaymentDetails(body?.paymentId);
 
     if (!paymentDetails) {
       res.status(400).json({ message: "invalid payment id" });
     }
 
-    const {organization} = await Requirement.findById(body?.donatedItems[0]?.requirmentId)
+    const { organization } = await Requirement.findById(
+      body?.donatedItems[0]?.id
+    );
 
-    const donatedItems = body?.donatedItems.map( async (item)=>{
-      const requirement = await Requirement.findById(item.requirementId);
-      
+    let grandTotal = 0;
 
-    })
+    const donatedItems = await Promise.all(
+      body?.donatedItems.map(async (item) => {
+        console.log("item", item);
+        const requirement = await Requirement.findById(item?.id);
+        const price = requirement?.unitPrice * item?.count;
+        grandTotal = +price;
+
+        const Items = {
+          requirmentId: requirement._id,
+          item: requirement?.item,
+          quantity: item?.count,
+          unitPrice: requirement?.unitPrice,
+          totalPrice: price,
+        };
+
+        const updatedRequirement = await Requirement.findByIdAndUpdate(
+          item?.id,
+          {
+            needs: requirement.needs - item?.count,
+            balancePrice: requirement?.balancePrice - price,
+          },
+          { new: true }
+        );
+
+        if (0 >= updatedRequirement.needs) {
+          await Requirement.findByIdAndUpdate(
+            item.id,
+            {
+              status: "Fulfilled",
+            },
+            { new: true }
+          );
+        }
+
+        console.log(updatedRequirement, "up");
+
+        return Items;
+      })
+    );
 
 
+    console.log("di->", donatedItems);
+    console.log("gt->", grandTotal);
 
-    console.log('rs->',paymentDetails.amount/100 );
-       
+    const savedDonation = await new Donation({
+      organaizationId:organization,
+      userId: body.userId,
+      requirmentId: body.requirmentId,
+      invoiceNo,
+      donatedItems: body.donatedItems,
+      totalPrice: body.totalPrice,
+      transactionId: body.transactionId,
+    }).save();
 
-    // const savedDonation = await new Donation({
-    //   organaizationId: body.organaizationId,
-    //   userId: body.userId,
-    //   requirmentId: body.requirmentId,
-    //   invoiceNo,
-    //   donatedItems: body.donatedItems,
-    //   totalPrice: body.totalPrice,
-    //   transactionId: body.transactionId,
-    // }).save();
-
-    const { email, name } = await User.findById(body.userId);
+    const { email, name } = await User.findById(id);
 
     // const { requirement } = await Requirement.findById(
     //   savedDonation.requirmentId
@@ -77,9 +117,10 @@ module.exports = async (req, res) => {
     //   console.log("email failed");
     // }
 
-    res.status(200).json(paymentDetails);
+    res.status(200).json(donatedItems);
     // .json(`Heartfelt Thanks for Your Donation via AahamCare ${message}`);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };

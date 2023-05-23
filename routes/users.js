@@ -68,14 +68,14 @@ router.post("/getMapLocaton", mapLocation);
 router.get("/pancard", panCard);
 
 // User Profile
-router.get("/user/:id", user.getProfileById);
-router.put("/user/:id", user.editProfile);
+router.get("/user", user.getProfileById);
+router.put("/user", user.editProfile);
 router.patch(
-  "/userProfile/:id",
+  "/userProfile",
   upload.single("profilePicture"),
   user.addProfilePicture
 );
-router.get('/getDonations/:id', user.getDonations)
+router.get('/getDonations', user.getDonations)
 
 // Division 
 router.get('/allDivision',division.getAllDivision )
