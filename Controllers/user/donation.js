@@ -83,6 +83,8 @@ module.exports = async (req, res) => {
       paymentId: body.paymentId,
     }).save();
 
+    // push org
+
     // Send email notification
     const { email, name } = await User.findById(id);
     const eMail = await sendMail(

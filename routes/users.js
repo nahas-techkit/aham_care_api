@@ -71,6 +71,7 @@ router.get("/pancard", panCard);
 router.get("/user", user.getProfileById);
 router.put("/user",upload.single("profilePicture"), user.editProfile);
 router.get('/getDonations', user.getDonations)
+router.patch('/changePassword', user.changePassword)
 
 // Division 
 router.get('/allDivision',division.getAllDivision )

@@ -21,6 +21,8 @@ module.exports = {
         unitPrice: body.unitPrice,
         totalPrice: body.totalPrice,
         remaining: body.requiremnt,
+        remainingPrice: body.totalPrice,
+
         photo: uploadedFile[0].path,
       }).save();
 

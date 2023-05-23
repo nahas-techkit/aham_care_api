@@ -12,7 +12,8 @@ const storeDonationSchema = mongoose.Schema(
       enum: ["Received", "Processing", "Completed", "Inactive"],
       default: "Received",
     },
-    invoiceNo:{ type:String, require: true}
+    invoiceNo:{ type:String, require: true},
+    count:{ type:String},
   },
 
 

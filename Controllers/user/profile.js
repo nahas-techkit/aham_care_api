@@ -3,14 +3,17 @@ const Donations = require("../../models/donation");
 const EventDonation = require("../../models/eventDonation");
 const StoreDonation = require("../../models/storeDonation");
 const deleteFile = require("../../lib/deleteFiles");
+const { dosms, otpVerify } = require("../../lib/OTP");
 const uploadedFiles = require("../../utils/uploads/uploadFiles");
 const deleteCloudeFiles = require("../../utils/uploads/deleteCloudeFile");
 const organaization = require("../../models/organaization");
+const bcrypt = require("bcrypt");
 
 module.exports = {
   getProfileById: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
+      console.log(id, "id");
       const user = await User.findById(id);
       res.status(200).json(user);
     } catch (error) {
@@ -49,13 +52,11 @@ module.exports = {
         await deleteFile("public" + uploadedFile[0].path);
       }
 
-      res.status(200).json({ message:"Profile updated successfully" });
+      res.status(200).json({ message: "Profile updated successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
-
-  
 
   getDonations: async (req, res) => {
     try {
@@ -107,4 +108,36 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
+
+  changePassword: async (req, res) => {
+    try {
+      const { body } = req;
+      const { id } = req.user;
+
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const check = await bcrypt.compare(body.password, user.password);
+
+      if (!check) {
+        return res.status(404).json({ message: "Invalid password" });
+      }
+
+      const cryptedPassword = await bcrypt.hash(body.newPassword, 12);
+
+      const changePassword = await User.findByIdAndUpdate(id, {
+        password: cryptedPassword,
+      });
+
+      res.status(200).json({ message: "Password changed" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  
+
+  
 };
