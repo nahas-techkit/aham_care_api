@@ -8,7 +8,8 @@ const organaization = require("../../models/organaization");
 module.exports = {
   getProfileById: async (req, res) => {
     try {
-      const { id } = req.params;
+      // const { id } = req.params;
+      const userId = req.user.id
       const user = await User.findById(id);
       res.status(200).json(user);
     } catch (error) {
@@ -18,7 +19,8 @@ module.exports = {
 
   editProfile: async (req, res) => {
     try {
-      const { id } = req.params;
+      // const { id } = req.params;
+      const id = req.user.id
       const { body } = req;
 
       const updatedProfile = await User.findByIdAndUpdate(id, {
@@ -33,7 +35,8 @@ module.exports = {
 
   addProfilePicture: async (req, res) => {
     try {
-      const { id } = req.params;
+      // const { id } = req.params;
+      const id = req.user.id
       const { file } = req;
 
       const user = await User.findById(id);
@@ -60,7 +63,8 @@ module.exports = {
   getDonations: async (req, res) => {
     try {
       console.log("donations");
-      const { id } = req.params;
+      // const { id } = req.params;
+      const id = req.user.id
       const donations = await Donations.find({ userId: id })
         .populate({
           path: "organaizationId",

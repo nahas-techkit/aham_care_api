@@ -5,19 +5,26 @@ const donationSchema = mongoose.Schema(
   {
     organaizationId: { type: ObjectId, ref: "Organization" },
     userId: { type: ObjectId, ref: "User" },
-    requirmentId: { type: ObjectId, ref: "Requirement" },
-    invoiceNo:{type:String},
+    invoiceNo: { type: String },
+    totalPrice: Number,
+    paymentId: String,
 
     donatedItems: [
       {
+        requirmentId: { type: ObjectId, ref: "Requirement" },
         item: String,
         quantity: String,
-        price: String,
+        unitPrice:String,
+        totalPrice: String,
+
       },
     ],
-    totalPrice: Number,
-    transactionId: String,
-    status: { type: String, enum: ["Pending", "Processing","Completed"], default: "Pending"},
+
+    status: {
+      type: String,
+      enum: ["Received", "Processing", "Completed"],
+      default: "Received",
+    },
   },
   {
     timestamps: true,
