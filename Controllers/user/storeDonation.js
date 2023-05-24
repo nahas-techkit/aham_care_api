@@ -34,6 +34,7 @@ module.exports = async (req, res) => {
       paymentId: body.paymentId,
       donatedAmount: grandTotal,
       count : body?.count,
+      unitPrice: store?.unitPrice,
       invoiceNo,
     }).save();
 

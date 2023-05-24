@@ -15,7 +15,7 @@ const organizationScheama = mongoose.Schema(
     galleryPhotos: [],
     residence: [{ type: ObjectId, ref: "Recidence" }],
     requirement: [{ type: ObjectId, ref: "Requirement" }],
-    donations: { type: ObjectId, ref: "Donations" },
+    donations: [{ type: ObjectId, ref: "Donations" }],
     documents: { type: String },
     email:{type:String, require:true},
     phone:{type:String, require:true},

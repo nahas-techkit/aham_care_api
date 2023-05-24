@@ -13,7 +13,8 @@ const storeDonationSchema = mongoose.Schema(
       default: "Received",
     },
     invoiceNo:{ type:String, require: true},
-    count:{ type:String},
+    count:{ type:Number},
+    unitPrice:Number
   },
 
 

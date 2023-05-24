@@ -9,6 +9,9 @@ module.exports = {
       const organizationOrders = await OrgOrders.find()
         .populate("organaizationId")
         .populate("userId");
+
+
+        console.log(organizationOrders)
       res.status(200).json(organizationOrders);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -21,7 +24,7 @@ module.exports = {
       const order = await OrgOrders.findById(id)
         .populate("organaizationId")
         .populate("userId")
-        .populate("requirmentId");
+        
       res.status(200).json(order);
     } catch (error) {
       res.status(500).json({ message: error.message });

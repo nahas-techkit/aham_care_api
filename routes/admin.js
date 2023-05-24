@@ -47,7 +47,6 @@ const upload = multer({ storage: storage });
 // Multer
 
 // Organization Routs//
-
 router.post("/organaization", upload.any(), createOrganaization);
 router.put("/organaization/:id", upload.any(), updateOrganaization.updateOrganaization);
 router.post("/addImages", upload.any(), addImages);

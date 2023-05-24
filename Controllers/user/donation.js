@@ -6,6 +6,7 @@ const getPaymentDetails = require("../../lib/getPaymentDetails");
 const chechPaymentAmount = require("../../lib/compareWithTolerance");
 const generateInvoice = require("../../lib/generateInvoiceNo");
 const user = require("../../models/user");
+const Orgnaization = require("../../models/organaization");
 
 module.exports = async (req, res) => {
   try {
@@ -25,7 +26,7 @@ module.exports = async (req, res) => {
 
     let grandTotal = 0;
 
-    // Analyse order details
+    // Analyse Order Details
     const donatedItems = await Promise.all(
       body?.donatedItems.map(async (item) => {
         console.log("item", item);
@@ -73,7 +74,7 @@ module.exports = async (req, res) => {
     );
     console.log(isAmountCurect);
 
-    // Save donation order information
+    // Save Donation Order Information
     const savedDonation = await new Donation({
       organaizationId: organization,
       userId: id,
@@ -83,9 +84,12 @@ module.exports = async (req, res) => {
       paymentId: body.paymentId,
     }).save();
 
-    // push org
+    // Push Donation To Organaization
+    await Orgnaization.findByIdAndUpdate(savedDonation.organaizationId, {
+      $push: { donations: savedDonation._id },
+    });
 
-    // Send email notification
+    // Send Email Notification
     const { email, name } = await User.findById(id);
     const eMail = await sendMail(
       email,
