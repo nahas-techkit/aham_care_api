@@ -111,7 +111,7 @@ module.exports = {
 
   changePassword: async (req, res) => {
     try {
-      const { body } = req;
+      const {body} = req;
       const { id } = req.user;
 
       const user = await User.findById(id);

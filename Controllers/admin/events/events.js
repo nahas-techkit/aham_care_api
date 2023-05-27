@@ -15,6 +15,7 @@ module.exports = {
         totalPrice: body.totalPrice,
         unitPrice: body.unitPrice,
         remainingTickets: body.totalTickets,
+        balancePrice: body.totalPrice
       }).save();
       res
         .status(200)

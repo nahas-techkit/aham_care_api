@@ -11,11 +11,12 @@ const eventSchema = mongoose.Schema(
     endDateTime: { type: String, required: true },
     remainingTickets: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
+    balancePrice: { type: Number, required: true },
     unitPrice: { type: Number, required: true },
     status: {
       type: String,
       require: true,
-      enum: ["Due date end", "Active", "Deleted"],
+      enum: ["Due date end", "Active", "Deleted", 'Fullfilled'],
       default:"Active"
     },
     donations: [

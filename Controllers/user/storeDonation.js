@@ -13,12 +13,12 @@ module.exports = async (req, res) => {
     if(store?.remaining <= 0 ){
         return res.status(200).json({message:"This is full filled"})
     }
+    const paymentDetails = await getPaymentDetails(body?.paymentId);
 
-    if(store?.remaining < body.donatedAmount){
+    if(store?.remaining < body?.paymentDetails?.amount){
         return res.status(400).json({message:`we want only ${store?.remaining} rupees`} )
     }
     const invoiceNo= await generateInvoiceNo()
-    const paymentDetails = await getPaymentDetails(body?.paymentId);
     const grandTotal = store?.unitPrice * body?.count
 
     const isAmountCurect = await checkPaymentAmount(
@@ -36,6 +36,7 @@ module.exports = async (req, res) => {
       count : body?.count,
       unitPrice: store?.unitPrice,
       invoiceNo,
+      
     }).save();
 
     const addDonationToStore = await Store.findByIdAndUpdate(savedStoreDonation.storeId, {

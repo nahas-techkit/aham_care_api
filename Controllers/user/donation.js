@@ -95,7 +95,9 @@ module.exports = async (req, res) => {
       email,
       "Heartfelt Thanks for Your Donation via AahamCare",
       name,
-      body.totalPrice
+      body?.totalPrice || '0',
+      "org-invoice",
+      savedDonation._id
     );
 
     let message = "";

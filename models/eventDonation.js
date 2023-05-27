@@ -6,7 +6,9 @@ const eventDonationSchema = mongoose.Schema({
     eventId:{type:ObjectId, ref:"Event"},
     paymentId:{type:String, require:true},
     donatedTickets:{type:Number, require:true},
+    unitPrice:Number,
     totalAmount:{type:Number, require:true},
+    invoiceNo:{type:String, require:true},
     status:{type:String, require:true, enum:["Pending", "Processing", "Completed"], default:"Pending"}
 },
 {
