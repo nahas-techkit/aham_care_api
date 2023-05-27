@@ -8,12 +8,18 @@ module.exports = async (req, res) => {
   try {
     const { body } = req;
     const {id} = req.user
+
     const store = await Store.findById(body.storeId);
+    const paymentDetails = await getPaymentDetails(body?.paymentId);
+
+    if(!paymentDetails){
+      return res.status(500).json({message:"Invalid paymentId"})
+    }
 
     if(store?.remaining <= 0 ){
         return res.status(200).json({message:"This is full filled"})
     }
-    const paymentDetails = await getPaymentDetails(body?.paymentId);
+    console.log("->",paymentDetails)
 
     if(store?.remaining < body?.paymentDetails?.amount){
         return res.status(400).json({message:`we want only ${store?.remaining} rupees`} )
@@ -21,10 +27,16 @@ module.exports = async (req, res) => {
     const invoiceNo= await generateInvoiceNo()
     const grandTotal = store?.unitPrice * body?.count
 
+    console.log(grandTotal,"GT");
+
     const isAmountCurect = await checkPaymentAmount(
       grandTotal,
       paymentDetails?.amount / 100
     );
+
+    if(!isAmountCurect) {
+      res.status(400).json({message:"Amount is not current"})
+    }
 
     console.log(isAmountCurect,'is');
 
